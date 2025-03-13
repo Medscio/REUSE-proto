@@ -46,11 +46,20 @@ The `deploy.sh` script (located at `podman/deploy.sh`) performs the following te
    chmod +x ./deploy.sh
    ```
 
-2. Run the `deploy.sh` script by running the following command:
+2. Run the `deploy.sh` script with the repository directory path as a required argument:
 
    ```bash
-   ./deploy.sh
+   ./deploy.sh /path/to/your/repository
    ```
+
+   For example:
+   ```bash
+   ./deploy.sh /home/username/dev/Medscio/REUSE
+   ```
+
+   Note: The repository directory should contain the following structure:
+   - `/data/` - Directory containing templates and other data files
+   - `/.env.airflow` - Environment configuration file for Airflow
 
    * During deployment, if prompted to choose podman images, choose the images from the `docker.io` registry in ALL cases. For example:
    
@@ -66,3 +75,21 @@ The `deploy.sh` script (located at `podman/deploy.sh`) performs the following te
    ```bash
     podman pod stop airflow && podman pod rm airflow && podman pod stop ehrbase && podman pod rm ehrbase && podman pod stop hapi-fhir && podman pod rm hapi-fhir
    ```
+
+## Troubleshooting
+
+If you encounter an error indicating that the repository directory does not exist, verify that:
+1. You've provided the correct path to your repository
+2. The path is absolute (starts with `/`) i.e, must be an absolute path
+3. You have appropriate permissions to read from the specified directory
+
+If the deployment fails due to missing data files or environment files, ensure that your repository directory follows the expected structure:
+```
+/your/repository/path/
+├── .env.airflow
+└── data/
+    ├── openEHR_templates/
+    ├── openEHR_compositions/
+    ├── EPIC_output/
+    └── hapi_fhir_profiles/
+```

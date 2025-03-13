@@ -1,8 +1,25 @@
 #!/bin/bash
 set -e
 
+# Check if repository directory argument is provided
+if [ $# -ne 1 ]; then
+    echo "Error: Repository directory argument is required (must be absolute path)."
+    echo "Usage: $0 <repository-directory>"
+    exit 1
+fi
+
+# Store repository directory path
+REPO_DIR="$1"
+
+# Validate that the directory exists
+if [ ! -d "$REPO_DIR" ]; then
+    echo "Error: Repository directory '$REPO_DIR' does not exist."
+    exit 1
+fi
+
 # Print status messages
 echo "Starting deployment script..."
+echo "Using repository directory: $REPO_DIR"
 echo "----------------------------"
 
 # Remove existing pods if they exist
@@ -69,30 +86,29 @@ mkdir -p $TEMP_DIR/data/EPIC_output
 mkdir -p $TEMP_DIR/data/hapi_fhir_profiles
 
 # Copy data files if they exist
-# if [ -d /home/howitzer/dev/Medscio/REUSE/data ]; then
-if [ -d /home/maverick/dev/Medscio/REUSE/data ]; then
+if [ -d "$REPO_DIR/data" ]; then
     echo "Copying data files..."
     
     # Copy only the contents of each subdirectory if they exist
-    if [ -d /home/maverick/dev/Medscio/REUSE/data/openEHR_templates ]; then
-        cp -r /home/maverick/dev/Medscio/REUSE/data/openEHR_templates/* $TEMP_DIR/data/openEHR_templates/ 2>/dev/null || echo "No files in openEHR_templates"
+    if [ -d "$REPO_DIR/data/openEHR_templates" ]; then
+        cp -r "$REPO_DIR/data/openEHR_templates"/* $TEMP_DIR/data/openEHR_templates/ 2>/dev/null || echo "No files in openEHR_templates"
     fi
     
-    if [ -d /home/maverick/dev/Medscio/REUSE/data/openEHR_compositions ]; then
+    if [ -d "$REPO_DIR/data/openEHR_compositions" ]; then
         # Don't overwrite the output directory we just created
-        for item in /home/maverick/dev/Medscio/REUSE/data/openEHR_compositions/*; do
+        for item in "$REPO_DIR/data/openEHR_compositions"/*; do
             if [ "$(basename "$item")" != "output" ]; then
                 cp -r "$item" $TEMP_DIR/data/openEHR_compositions/ 2>/dev/null
             fi
         done
     fi
     
-    if [ -d /home/maverick/dev/Medscio/REUSE/data/EPIC_output ]; then
-        cp -r /home/maverick/dev/Medscio/REUSE/data/EPIC_output/* $TEMP_DIR/data/EPIC_output/ 2>/dev/null || echo "No files in EPIC_output"
+    if [ -d "$REPO_DIR/data/EPIC_output" ]; then
+        cp -r "$REPO_DIR/data/EPIC_output"/* $TEMP_DIR/data/EPIC_output/ 2>/dev/null || echo "No files in EPIC_output"
     fi
     
-    if [ -d /home/maverick/dev/Medscio/REUSE/data/hapi_fhir_profiles ]; then
-        cp -r /home/maverick/dev/Medscio/REUSE/data/hapi_fhir_profiles/* $TEMP_DIR/data/hapi_fhir_profiles/ 2>/dev/null || echo "No files in hapi_fhir_profiles"
+    if [ -d "$REPO_DIR/data/hapi_fhir_profiles" ]; then
+        cp -r "$REPO_DIR/data/hapi_fhir_profiles"/* $TEMP_DIR/data/hapi_fhir_profiles/ 2>/dev/null || echo "No files in hapi_fhir_profiles"
     fi
     
     echo "Verifying data files were copied to temp directory:"
@@ -100,21 +116,21 @@ if [ -d /home/maverick/dev/Medscio/REUSE/data ]; then
     echo "Checking output directories:"
     ls -la $TEMP_DIR/data/openEHR_compositions/
 else
-    echo "WARNING: data directory not found at /home/maverick/dev/Medscio/REUSE/data"
+    echo "WARNING: data directory not found at $REPO_DIR/data"
 fi
 
 # Ensure the output directory exists and has the right permissions in the temp directory
 chmod -R 777 $TEMP_DIR/data/openEHR_compositions/output $TEMP_DIR/data/EPIC_output
 
 # Copy .env.airflow file if it exists
-if [ -f /home/maverick/dev/Medscio/REUSE/.env.airflow ]; then
+if [ -f "$REPO_DIR/.env.airflow" ]; then
     echo "Copying .env.airflow file..."
     mkdir -p $TEMP_DIR/project
-    cp /home/maverick/dev/Medscio/REUSE/.env.airflow $TEMP_DIR/project/
+    cp "$REPO_DIR/.env.airflow" $TEMP_DIR/project/
     echo "Verifying .env.airflow file was copied to temp directory:"
     ls -la $TEMP_DIR/project/
 else
-    echo "WARNING: .env.airflow file not found at /home/maverick/dev/Medscio/REUSE/.env.airflow"
+    echo "WARNING: .env.airflow file not found at $REPO_DIR/.env.airflow"
 fi
 
 # Continue appending to the Dockerfile now that we know if project files exist
