@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: hapi-fhir
+spec:
+  containers:
+  - name: hapi-fhir
+    image: hapiproject/hapi:latest
+    ports:
+    - containerPort: 8080
+      hostPort: 8082
+    env:
+    - name: HAPI_FHIR_VERSION
+      value: "R4"
+    - name: HAPI_FHIR_DEFAULT_ENCODING
+      value: "JSON"
+    - name: HAPI_FHIR_ALLOW_EXTERNAL_REFERENCES
+      value: "true"
+    - name: HAPI_FHIR_ALLOW_PLACEHOLDER_REFERENCES
+      value: "true"
+    - name: JAVA_TOOL_OPTIONS
+      value: "-Xmx1g -Xms512m"
+    startupProbe:
+      httpGet:
+        path: /fhir/metadata
+        port: 8080
+      initialDelaySeconds: 90
+      periodSeconds: 10
+      failureThreshold: 30

@@ -1,0 +1,173 @@
+{
+  "resourceType": "StructureDefinition",
+  "id": "nl-core-LaboratoryTestResult",
+  "text": {
+    "status": "empty",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">No narrative is provided for definitional resources. A human-readable rendering can be found in the implementation guide(s) where this resource is used.</div>"
+  },
+  "url": "http://nictiz.nl/fhir/StructureDefinition/nl-core-LaboratoryTestResult",
+  "name": "NlcoreLaboratoryTestResult",
+  "title": "nl core LaboratoryTestResult",
+  "status": "draft",
+  "publisher": "Nictiz",
+  "contact": [
+    {
+      "name": "Nictiz",
+      "telecom": [
+        {
+          "system": "url",
+          "value": "https://www.nictiz.nl",
+          "use": "work"
+        }
+      ]
+    }
+  ],
+  "description": "A laboratory result describes the result of a laboratory analysis.\r\nThese are specimen-oriented tests as performed in laboratories such as Clinical Chemistry, Serology, Microbiology, etc.\r\nIn addition to the results of tests with a singular result, this concept can also contain the results of more complex tests with multiple results or a ‘panel’.",
+  "purpose": "A derived profile from [zib-LaboratoryTestResult](http://nictiz.nl/fhir/StructureDefinition/zib-LaboratoryTestResult) to provide a version better suited for implementation purposes. This profile augments the base profile with elements found in the various use cases that have adopted the zib.",
+  "copyright": "Copyright and related rights waived via CC0, https://creativecommons.org/publicdomain/zero/1.0/. This does not apply to information from third parties, for example a medical terminology system. The implementer alone is responsible for identifying and obtaining any necessary licenses or authorizations to utilize third party IP in connection with the specification or otherwise.",
+  "fhirVersion": "4.0.1",
+  "mapping": [
+    {
+      "identity": "zib-laboratorytestresult-v4.6-2020EN",
+      "uri": "https://zibs.nl/wiki/LaboratoryTestResult-v4.6(2020EN)",
+      "name": "zib LaboratoryTestResult-v4.6(2020EN)"
+    },
+    {
+      "identity": "lu-dataset-laboratory-exchange-20210222",
+      "uri": "https://decor.nictiz.nl/ad/#/lu-/datasets/dataset/2.16.840.1.113883.2.4.3.11.60.25.1.2/2021-02-22T00:00:00",
+      "name": "ART-DECOR Dataset Lab Exchange 20210222T00:00:00"
+    }
+  ],
+  "kind": "resource",
+  "abstract": false,
+  "type": "Observation",
+  "baseDefinition": "http://nictiz.nl/fhir/StructureDefinition/zib-LaboratoryTestResult",
+  "derivation": "constraint",
+  "differential": {
+    "element": [
+      {
+        "id": "Observation",
+        "path": "Observation",
+        "alias": [
+          "nl-core-LaboratoryTestResult"
+        ]
+      },
+      {
+        "id": "Observation.extension:sequelTo",
+        "path": "Observation.extension",
+        "sliceName": "sequelTo"
+      },
+      {
+        "id": "Observation.extension:sequelTo.value[x]",
+        "path": "Observation.extension.value[x]",
+        "type": [
+          {
+            "code": "Reference",
+            "targetProfile": [
+              "http://hl7.org/fhir/StructureDefinition/Observation",
+              "http://nictiz.nl/fhir/StructureDefinition/nl-core-LaboratoryTestResult"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "Observation.extension:edifactReferenceNumber",
+        "path": "Observation.extension",
+        "sliceName": "edifactReferenceNumber",
+        "type": [
+          {
+            "code": "Extension",
+            "profile": [
+              "http://nictiz.nl/fhir/StructureDefinition/ext-EdifactReferenceNumber"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "Observation.extension:copyIndicator",
+        "path": "Observation.extension",
+        "sliceName": "copyIndicator",
+        "type": [
+          {
+            "code": "Extension",
+            "profile": [
+              "http://nictiz.nl/fhir/StructureDefinition/ext-CopyIndicator"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "Observation.identifier",
+        "path": "Observation.identifier",
+        "mapping": [
+          {
+            "identity": "lu-dataset-laboratory-exchange-20210222",
+            "map": "lu-concept-v2-4296",
+            "comment": "LaboratoriumUitslagIdentificatie"
+          },
+          {
+            "identity": "lu-dataset-laboratory-exchange-20210222",
+            "map": "lu-concept-v2-4298",
+            "comment": "TestIdentificatie"
+          }
+        ]
+      },
+      {
+        "id": "Observation.subject",
+        "path": "Observation.subject",
+        "type": [
+          {
+            "code": "Reference",
+            "targetProfile": [
+              "http://hl7.org/fhir/StructureDefinition/Patient",
+              "http://hl7.org/fhir/StructureDefinition/Group",
+              "http://hl7.org/fhir/StructureDefinition/Device",
+              "http://hl7.org/fhir/StructureDefinition/Location",
+              "http://nictiz.nl/fhir/StructureDefinition/nl-core-Patient"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "Observation.performer:performer",
+        "path": "Observation.performer",
+        "sliceName": "performer",
+        "definition": "The organization where or by whom the LaboratoryTestResult was performed.\r\n\r\nNote: the zib formally defines this relation as a reference to zib HealthcareProvider, which is primarily defined as the location at which the service was performed, and only secondarily as the organization associated with this location. According to this logic, the expected reference would be to the zib HealthcareProvider Location profile (<http://nictiz.nl/fhir/StructureDefinition/nl-core-HealthcareProvider>) rather than the Organization profile (<http://nictiz.nl/fhir/StructureDefinition/nl-core-HealthcareProvider-Organization>). However, on a functional level this concept is usually understood to be about the organization rather than the location, which is in line with the way FHIR models the current element. For this reason, the Organization rather than the Location resource is referenced here. See https://bits.nictiz.nl/browse/MM-4747 for more information.",
+        "type": [
+          {
+            "code": "Reference",
+            "targetProfile": [
+              "http://nictiz.nl/fhir/StructureDefinition/nl-core-HealthcareProvider-Organization"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "Observation.specimen",
+        "path": "Observation.specimen",
+        "type": [
+          {
+            "code": "Reference",
+            "targetProfile": [
+              "http://hl7.org/fhir/StructureDefinition/Specimen",
+              "http://nictiz.nl/fhir/StructureDefinition/nl-core-LaboratoryTestResult.Specimen"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "Observation.hasMember:laboratoryTest",
+        "path": "Observation.hasMember",
+        "sliceName": "laboratoryTest",
+        "type": [
+          {
+            "code": "Reference",
+            "targetProfile": [
+              "http://nictiz.nl/fhir/StructureDefinition/nl-core-LaboratoryTestResult"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

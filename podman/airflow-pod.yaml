@@ -1,0 +1,125 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: airflow
+spec:
+  containers:
+  - name: airflow-db
+    image: postgres:14
+    env:
+    - name: POSTGRES_USER
+      value: "airflow"
+    - name: POSTGRES_PASSWORD
+      value: "airflow"
+    - name: POSTGRES_DB
+      value: "airflow"
+    ports:
+    - containerPort: 5432
+    readinessProbe:
+      exec:
+        command: ["pg_isready", "-U", "airflow"]
+      initialDelaySeconds: 5
+      periodSeconds: 5
+
+  - name: airflow-webserver
+    image: localhost/custom-airflow:latest
+    command:
+    - "/bin/bash"
+    - "-c"
+    - |
+      # Load environment variables from .env.airflow in the non-mounted location
+      if [ -f /opt/airflow/.env.airflow ]; then
+        export $(cat /opt/airflow/.env.airflow | grep -v '^#' | xargs)
+        echo "Loaded environment variables from /opt/airflow/.env.airflow"
+      else
+        echo "WARNING: Environment file not found at /opt/airflow/.env.airflow"
+      fi
+      export PYTHONPATH=${PYTHONPATH}:/opt/airflow
+      airflow db init &&
+      airflow users create \
+        --username admin \
+        --password admin \
+        --firstname admin \
+        --lastname admin \
+        --role Admin \
+        --email admin@example.com &&
+      airflow webserver
+    env:
+    # - name: AIRFLOW__LOGGING__LOGGING_LEVEL
+    #   value: "DEBUG"
+    # - name: AIRFLOW__CORE__LOGGING_LEVEL
+    #   value: "DEBUG"
+    - name: PYTHONPATH
+      value: "/opt/airflow"
+    - name: AIRFLOW__CORE__EXECUTOR
+      value: "LocalExecutor"
+    - name: AIRFLOW__DATABASE__SQL_ALCHEMY_CONN
+      value: "postgresql+psycopg2://airflow:airflow@127.0.0.1:5432/airflow"
+    ports:
+    - containerPort: 8080
+      hostPort: 8090
+    volumeMounts:
+    - name: airflow-logs
+      mountPath: /opt/airflow/logs
+    - name: airflow-data
+      mountPath: /opt/airflow/data
+    startupProbe:
+      exec:
+        command:
+        - "/bin/sh"
+        - "-c"
+        - "nc -z 127.0.0.1 5432"
+      initialDelaySeconds: 10
+      periodSeconds: 5
+      failureThreshold: 30
+
+  - name: airflow-scheduler
+    image: localhost/custom-airflow:latest
+    command:
+    - "/bin/bash"
+    - "-c"
+    - |
+      # Load environment variables from .env.airflow in the non-mounted location
+      if [ -f /opt/airflow/.env.airflow ]; then
+        export $(cat /opt/airflow/.env.airflow | grep -v '^#' | xargs)
+        echo "Loaded environment variables from /opt/airflow/.env.airflow"
+      else
+        echo "WARNING: Environment file not found at /opt/airflow/.env.airflow"
+      fi
+      export PYTHONPATH=${PYTHONPATH}:/opt/airflow
+      # Wait for webserver to initialize database
+      COUNTER=0
+      until curl -s http://127.0.0.1:8080/health || [ $COUNTER -eq 30 ]; do
+        sleep 10
+        COUNTER=$((COUNTER + 1))
+        echo "Waiting for webserver... attempt $COUNTER"
+      done
+      # Start the scheduler
+      airflow scheduler
+    env:
+    - name: PYTHONPATH
+      value: "/opt/airflow"
+    - name: AIRFLOW__CORE__EXECUTOR
+      value: "LocalExecutor"
+    - name: AIRFLOW__DATABASE__SQL_ALCHEMY_CONN
+      value: "postgresql+psycopg2://airflow:airflow@127.0.0.1:5432/airflow"
+    volumeMounts:
+    - name: airflow-logs
+      mountPath: /opt/airflow/logs
+    - name: airflow-data
+      mountPath: /opt/airflow/data
+    startupProbe:
+      exec:
+        command:
+        - "/bin/sh"
+        - "-c"
+        - "nc -z 127.0.0.1 5432"
+      initialDelaySeconds: 10
+      periodSeconds: 5
+      failureThreshold: 30
+
+  volumes:
+  - name: airflow-logs
+    emptyDir: {}
+  - name: airflow-data
+    emptyDir: {}

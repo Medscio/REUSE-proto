@@ -1,0 +1,21 @@
+{
+    "lab_report/context/report_id": "DiagnosticReport.ID",
+    "lab_report/context/_health_care_facility|name": "Encounter.Location",
+    "lab_report/laboratory_test_result/any_event:0/test_name": "DiagnosticReport.Code",
+    "lab_report/laboratory_test_result/any_event:0/specimen/specimen_type": "Observations[0].Specimen.Specimen Type.display",
+    "lab_report/laboratory_test_result/any_event:0/specimen/laboratory_specimen_identifier": "Observations[0].Specimen.Specimen Identifier",
+    "lab_report/laboratory_test_result/any_event:0/specimen/collection_date_time/date_time_value": "Observations[0].Specimen.Collection Time",
+    "lab_report/laboratory_test_result/any_event:0/overall_test_status:0|other": "DiagnosticReport.Status",
+    "lab_report/laboratory_test_result/any_event:0/laboratory_analyte_result:0/analyte_name": "Observations[0].TestCode.display",
+    "lab_report/laboratory_test_result/any_event:0/laboratory_analyte_result:0/analyte_result:0/quantity_value|unit": "Observations[0].TestResult.unit",
+    "lab_report/laboratory_test_result/any_event:0/laboratory_analyte_result:0/analyte_result:0/quantity_value|magnitude": "Observations[0].TestResult.value",
+    "lab_report/laboratory_test_result/any_event:0/laboratory_analyte_result:0/analyte_result:0/quantity_value/_normal_range/lower|magnitude": "Observations[0].Reference Range.low",
+    "lab_report/laboratory_test_result/any_event:0/laboratory_analyte_result:0/analyte_result:0/quantity_value/_normal_range/upper|magnitude": "Observations[0].Reference Range.high",
+    "lab_report/laboratory_test_result/any_event:0/laboratory_analyte_result:0/analyte_result:0/quantity_value/_normal_range/lower|unit": "Observations[0].Reference Range.unit",
+    "lab_report/laboratory_test_result/any_event:0/laboratory_analyte_result:0/analyte_result:0/quantity_value/_normal_range/upper|unit": "Observations[0].Reference Range.unit",
+    "lab_report/laboratory_test_result/any_event:0/laboratory_analyte_result:0/validation_time": "Observations[0].TestDateTime",
+    "lab_report/laboratory_test_result/any_event:0/laboratory_analyte_result:0/result_status:0|other": "Observations[0].TestStatus",
+    "lab_report/laboratory_test_result/test_request_details:0/person/identifier:0/identifier_value|id": "Practitioners[0].Identifier[0].value",
+    "lab_report/laboratory_test_result/test_request_details:0/person/role:0": "Practitioners[0].Qualification[0].code.text",
+    "lab_report/laboratory_test_result/test_request_details:0/person/name:0": "Practitioners[0].Name"
+  }

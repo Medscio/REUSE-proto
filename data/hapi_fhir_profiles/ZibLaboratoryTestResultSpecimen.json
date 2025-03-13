@@ -1,0 +1,385 @@
+{
+  "resourceType": "StructureDefinition",
+  "id": "zib-LaboratoryTestResult.Specimen",
+  "text": {
+    "status": "empty",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">No narrative is provided for definitional resources. A human-readable rendering can be found in the implementation guide(s) where this resource is used.</div>"
+  },
+  "url": "http://nictiz.nl/fhir/StructureDefinition/zib-LaboratoryTestResult.Specimen",
+  "name": "ZibLaboratoryTestResultSpecimen",
+  "title": "zib LaboratoryTestResult.Specimen",
+  "status": "draft",
+  "publisher": "Nictiz",
+  "contact": [
+    {
+      "name": "Nictiz",
+      "telecom": [
+        {
+          "system": "url",
+          "value": "https://www.nictiz.nl",
+          "use": "work"
+        }
+      ]
+    }
+  ],
+  "description": "Obtained specimen material or a microbial isolate that is used in a laboratory analysis.",
+  "purpose": "This Specimen resource represents the Specimen concept of the Dutch [zib ('Zorginformatiebouwsteen', i.e. Health and Care Information Model) LaboratoryTestResult v4.6 (2020)](https://zibs.nl/wiki/LaboratoryTestResult-v4.6(2020EN)).",
+  "copyright": "Copyright and related rights waived via CC0, https://creativecommons.org/publicdomain/zero/1.0/. This does not apply to information from third parties, for example a medical terminology system. The implementer alone is responsible for identifying and obtaining any necessary licenses or authorizations to utilize third party IP in connection with the specification or otherwise.",
+  "fhirVersion": "4.0.1",
+  "mapping": [
+    {
+      "identity": "zib-laboratorytestresult-v4.6-2020EN",
+      "uri": "https://zibs.nl/wiki/LaboratoryTestResult-v4.6(2020EN)",
+      "name": "zib LaboratoryTestResult-v4.6(2020EN)"
+    }
+  ],
+  "kind": "resource",
+  "abstract": true,
+  "type": "Specimen",
+  "baseDefinition": "http://hl7.org/fhir/StructureDefinition/Specimen",
+  "derivation": "constraint",
+  "differential": {
+    "element": [
+      {
+        "id": "Specimen",
+        "path": "Specimen",
+        "short": "Specimen",
+        "comment": "The Specimen concept from Dutch zib LaboratoryTestResult contains a concept for SpecimenMaterial and for Microorganism (isolated from the specimen material). These two concepts cannot be represented in the same Specimen resources; if there's a need to communicate both the microorganism and the sample material from which it was isolated, two instances need to be used. The instance representing the microorganism should refer in this case to the instance representing the sample material using `Specimen.parent`. All other zib concepts should be repeated in both resources.",
+        "alias": [
+          "Monster"
+        ],
+        "mapping": [
+          {
+            "identity": "zib-laboratorytestresult-v4.6-2020EN",
+            "map": "NL-CM:13.1.2",
+            "comment": "Specimen"
+          }
+        ]
+      },
+      {
+        "id": "Specimen.identifier",
+        "path": "Specimen.identifier",
+        "short": "SpecimenId",
+        "definition": "Identification number of the material obtained, as a reference for inquiries to the source organization. In a transmural setting, this number will consist of a specimen number including the identification of the issuing organization, to be unique outside of the borders of an organization.",
+        "alias": [
+          "Monsternummer"
+        ],
+        "mapping": [
+          {
+            "identity": "zib-laboratorytestresult-v4.6-2020EN",
+            "map": "NL-CM:13.1.15",
+            "comment": "SpecimenId"
+          }
+        ]
+      },
+      {
+        "id": "Specimen.type",
+        "path": "Specimen.type",
+        "short": "SpecimenMaterial / Microorganism",
+        "definition": "* SpecimenMaterial describes the material obtained. If the LOINC test code also implicitly describes a material, this element may not conflict with the description. If desired, this component can provide a more detailed description of the material: LOINC codes only contain the materials at a main level. This is in line with the agreements made in the IHE/Nictiz program e-Lab.\r\n* In particular in microbiological determinations the subject of the test is an isolate of a certain microorganism rather then a material. This concept provides the ability to capture information about this microorganism.",
+        "comment": "The Specimen concept from Dutch zib LaboratoryTestResult contains a concept for SpecimenMaterial and for Microorganism (isolated from the specimen material). These two concepts cannot be represented in the same Specimen resource; this `Specimen.type` element defines which of the two concepts is represented.\r\n\r\nIf there's a need to communicate both the microorganism and the sample material from which it was isolated, two instances need to be used. The instance representing the microorganism should refer in this case to the instance respresenting the sample material using `Specimen.parent`.\r\n\r\nIf this resource represents material and is carried out on derived material (such as plasma), this element will still contain the material drawn (in this case, blood). In this case, the LOINC code will generally refer to plasma.",
+        "alias": [
+          "Monstermateriaal",
+          "Microorganisme"
+        ],
+        "binding": {
+          "strength": "required",
+          "valueSet": "http://nictiz.nl/fhir/ValueSet/Monstermateriaal-en-Microorganisme-Codelijsten"
+        },
+        "mapping": [
+          {
+            "identity": "zib-laboratorytestresult-v4.6-2020EN",
+            "map": "NL-CM:13.1.16",
+            "comment": "SpecimenMaterial"
+          },
+          {
+            "identity": "zib-laboratorytestresult-v4.6-2020EN",
+            "map": "NL-CM:13.1.22",
+            "comment": "Microorganism"
+          }
+        ]
+      },
+      {
+        "id": "Specimen.subject",
+        "path": "Specimen.subject",
+        "short": "SpecimenSource",
+        "definition": "If the material is not collected directly from the patient but comes from a patient-related object, e.g. a cathetertip, this source of material can be recorded here.",
+        "comment": "If zib concept SpecimenSource (NL-CM:13.1.29) is used, it can be recorded here using a reference to an instance of the [zib-LaboratoryTestResult.SpecimenSource](http://nictiz.nl/fhir/StructureDefinition/zib-LaboratoryTestResult.SpecimenSource) profile.",
+        "alias": [
+          "BronMonster"
+        ],
+        "type": [
+          {
+            "code": "Reference",
+            "targetProfile": [
+              "http://hl7.org/fhir/StructureDefinition/Patient",
+              "http://hl7.org/fhir/StructureDefinition/Group",
+              "http://hl7.org/fhir/StructureDefinition/Device",
+              "http://hl7.org/fhir/StructureDefinition/Substance",
+              "http://hl7.org/fhir/StructureDefinition/Location",
+              "http://nictiz.nl/fhir/StructureDefinition/zib-LaboratoryTestResult.SpecimenSource"
+            ]
+          }
+        ],
+        "mapping": [
+          {
+            "identity": "zib-laboratorytestresult-v4.6-2020EN",
+            "map": "NL-CM:13.1.29",
+            "comment": "SpecimenSource"
+          }
+        ]
+      },
+      {
+        "id": "Specimen.receivedTime",
+        "path": "Specimen.receivedTime",
+        "short": "ReceivedDateTime",
+        "definition": "Date and time that the material is handed over at the laboratory or specimen collection center. This is the issue with material that is collected by the patient himself.",
+        "alias": [
+          "AannameDatumTijd"
+        ],
+        "mapping": [
+          {
+            "identity": "zib-laboratorytestresult-v4.6-2020EN",
+            "map": "NL-CM:13.1.25",
+            "comment": "ReceivedDateTime"
+          }
+        ]
+      },
+      {
+        "id": "Specimen.parent",
+        "path": "Specimen.parent",
+        "comment": "When this resource represents a microorganism (that is, `Specimen.type` represents the zib concept Microorganism (NL-CM:13.1.22) and contains a code from MicroorganismeCodelijst), this reference can be used to refer to the source material from which it was isolated. In this case, the referenced resource should have `Specimen.type` represent the zib concept SpecimenMaterial (NL-CM:13.1.16) and contain a code from MonstermateriaalCodelijst.",
+        "type": [
+          {
+            "code": "Reference",
+            "targetProfile": [
+              "http://hl7.org/fhir/StructureDefinition/Specimen",
+              "http://nictiz.nl/fhir/StructureDefinition/zib-LaboratoryTestResult.Specimen"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "Specimen.collection.collected[x]",
+        "path": "Specimen.collection.collected[x]",
+        "slicing": {
+          "discriminator": [
+            {
+              "type": "type",
+              "path": "$this"
+            }
+          ],
+          "rules": "open"
+        }
+      },
+      {
+        "id": "Specimen.collection.collected[x]:collectedDateTime",
+        "path": "Specimen.collection.collected[x]",
+        "sliceName": "collectedDateTime",
+        "short": "CollectionDateTime",
+        "definition": "Date and time at which the material was collected.",
+        "alias": [
+          "AfnameDatumTijd"
+        ],
+        "type": [
+          {
+            "code": "dateTime"
+          }
+        ],
+        "mapping": [
+          {
+            "identity": "zib-laboratorytestresult-v4.6-2020EN",
+            "map": "NL-CM:13.1.17",
+            "comment": "CollectionDateTime"
+          }
+        ]
+      },
+      {
+        "id": "Specimen.collection.collected[x]:collectedPeriod",
+        "path": "Specimen.collection.collected[x]",
+        "sliceName": "collectedPeriod",
+        "short": "CollectionPeriod",
+        "definition": "If the material has not been collected at a single point in time but over a certain period, this period can be captured in this concept. An example is 24 hour urine.",
+        "alias": [
+          "Verzamelperiode"
+        ],
+        "type": [
+          {
+            "code": "Period"
+          }
+        ],
+        "mapping": [
+          {
+            "identity": "zib-laboratorytestresult-v4.6-2020EN",
+            "map": "NL-CM:13.1.24",
+            "comment": "CollectionPeriod"
+          }
+        ]
+      },
+      {
+        "id": "Specimen.collection.duration",
+        "path": "Specimen.collection.duration",
+        "short": "CollectionPeriod",
+        "definition": "If the material has not been collected at a single point in time but over a certain period, this period can be captured in this concept. An example is 24 hour urine.",
+        "alias": [
+          "Verzamelperiode"
+        ],
+        "mapping": [
+          {
+            "identity": "zib-laboratorytestresult-v4.6-2020EN",
+            "map": "NL-CM:13.1.24",
+            "comment": "CollectionPeriod"
+          }
+        ]
+      },
+      {
+        "id": "Specimen.collection.quantity",
+        "path": "Specimen.collection.quantity",
+        "short": "CollectedVolume",
+        "definition": "Total volume of the collected material. If it is necessary to determine the absolute amount of a particular substance in the collected material, the volume thereof must be given.",
+        "alias": [
+          "Verzamelvolume"
+        ],
+        "mapping": [
+          {
+            "identity": "zib-laboratorytestresult-v4.6-2020EN",
+            "map": "NL-CM:13.1.23",
+            "comment": "CollectedVolume"
+          }
+        ]
+      },
+      {
+        "id": "Specimen.collection.method",
+        "path": "Specimen.collection.method",
+        "short": "CollectionMethod",
+        "definition": "If relevant for the results, the method of obtaining the specimen can be entered as well.",
+        "alias": [
+          "Afnameprocedure"
+        ],
+        "binding": {
+          "strength": "required",
+          "valueSet": "http://decor.nictiz.nl/fhir/ValueSet/2.16.840.1.113883.2.4.3.11.60.40.2.13.1.2--20200901000000"
+        },
+        "mapping": [
+          {
+            "identity": "zib-laboratorytestresult-v4.6-2020EN",
+            "map": "NL-CM:13.1.18",
+            "comment": "CollectionMethod"
+          }
+        ]
+      },
+      {
+        "id": "Specimen.collection.bodySite",
+        "path": "Specimen.collection.bodySite",
+        "short": "Location / AnatomicalLocation",
+        "definition": "Anatomic location where the material is collected, e.g. elbow.",
+        "alias": [
+          "AnatomischeLocatie"
+        ],
+        "type": [
+          {
+            "code": "CodeableConcept",
+            "profile": [
+              "http://nictiz.nl/fhir/StructureDefinition/zib-AnatomicalLocation"
+            ]
+          }
+        ],
+        "binding": {
+          "strength": "required",
+          "valueSet": "http://decor.nictiz.nl/fhir/ValueSet/2.16.840.1.113883.2.4.3.11.60.121.11.11--20200901000000"
+        },
+        "mapping": [
+          {
+            "identity": "zib-laboratorytestresult-v4.6-2020EN",
+            "map": "NL-CM:13.1.36",
+            "comment": "AnatomicalLocation"
+          }
+        ]
+      },
+      {
+        "id": "Specimen.collection.bodySite.extension:morphology",
+        "path": "Specimen.collection.bodySite.extension",
+        "sliceName": "morphology",
+        "max": "1",
+        "type": [
+          {
+            "code": "Extension",
+            "profile": [
+              "http://nictiz.nl/fhir/StructureDefinition/ext-LaboratoryTestResult.Specimen.Morphology"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "Specimen.container.extension:specimenNumberExtension",
+        "path": "Specimen.container.extension",
+        "sliceName": "specimenNumberExtension",
+        "type": [
+          {
+            "code": "Extension",
+            "profile": [
+              "http://hl7.org/fhir/StructureDefinition/specimen-sequenceNumber"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "Specimen.container.extension:specimenNumberExtension.value[x]",
+        "path": "Specimen.container.extension.value[x]",
+        "short": "SpecimenNumberExtension",
+        "definition": "The specimen number extension is used when the collected material is distributed from the original tube or container across multiple tubes. In combination with the specimen Id the extension yield a unique identification of the tube or container.",
+        "alias": [
+          "Monstervolgnummer"
+        ],
+        "mapping": [
+          {
+            "identity": "zib-laboratorytestresult-v4.6-2020EN",
+            "map": "NL-CM:13.1.20",
+            "comment": "SpecimenNumberExtension"
+          }
+        ]
+      },
+      {
+        "id": "Specimen.container.type",
+        "path": "Specimen.container.type",
+        "short": "ContainerType",
+        "definition": "Container type describes the envelope in which the material is collected or sent. Examples include blood tubes, transport container, possibly including culture medium.",
+        "alias": [
+          "Containertype"
+        ],
+        "binding": {
+          "strength": "extensible",
+          "valueSet": "http://decor.nictiz.nl/fhir/ValueSet/2.16.840.1.113883.2.4.3.11.60.40.2.13.1.9--20200901000000"
+        },
+        "mapping": [
+          {
+            "identity": "zib-laboratorytestresult-v4.6-2020EN",
+            "map": "NL-CM:13.1.21",
+            "comment": "ContainerType"
+          }
+        ]
+      },
+      {
+        "id": "Specimen.note",
+        "path": "Specimen.note",
+        "max": "1"
+      },
+      {
+        "id": "Specimen.note.text",
+        "path": "Specimen.note.text",
+        "short": "Comment",
+        "definition": "Comments on the specimen , such as drawing material after a (glucose) stimulus or taking medicine.",
+        "alias": [
+          "Toelichting"
+        ],
+        "mapping": [
+          {
+            "identity": "zib-laboratorytestresult-v4.6-2020EN",
+            "map": "NL-CM:13.1.19",
+            "comment": "Comment"
+          }
+        ]
+      }
+    ]
+  }
+}

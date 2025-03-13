@@ -1,0 +1,4 @@
+aql_query_response.json
+fhir_bundle.json
+fhir_validation_response.json
+diagnostic_reports_*

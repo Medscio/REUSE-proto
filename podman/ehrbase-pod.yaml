@@ -1,0 +1,55 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: ehrbase
+spec:
+  containers:
+  - name: ehrdb
+    image: ehrbase/ehrbase-v2-postgres:16.2
+    env:
+    - name: POSTGRES_USER
+      value: "postgres"
+    - name: POSTGRES_PASSWORD
+      value: "postgres"
+    - name: EHRBASE_USER_ADMIN
+      value: "ehrbase"
+    - name: EHRBASE_PASSWORD_ADMIN
+      value: "ehrbase"
+    - name: EHRBASE_USER
+      value: "ehrbase_restricted"
+    - name: EHRBASE_PASSWORD
+      value: "ehrbase_restricted"
+    ports:
+    - containerPort: 5432
+      hostPort: 5433
+    readinessProbe:
+      exec:
+        command: ["pg_isready", "-U", "postgres"]
+      initialDelaySeconds: 5
+      periodSeconds: 5
+
+  - name: ehrbase
+    image: ehrbase/ehrbase:next
+    env:
+    - name: DB_URL
+      value: "jdbc:postgresql://localhost:5432/ehrbase"
+    - name: DB_USER_ADMIN
+      value: "ehrbase"
+    - name: DB_PASS_ADMIN
+      value: "ehrbase"
+    - name: DB_USER
+      value: "ehrbase_restricted"
+    - name: DB_PASS
+      value: "ehrbase_restricted"
+    ports:
+    - containerPort: 8080
+      hostPort: 8084
+    startupProbe:
+      exec:
+        command:
+        - "/bin/sh"
+        - "-c"
+        - "nc -z localhost 5432"
+      initialDelaySeconds: 10
+      periodSeconds: 5
+      failureThreshold: 30

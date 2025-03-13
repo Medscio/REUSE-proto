@@ -1,0 +1,514 @@
+{
+  "resourceType": "StructureDefinition",
+  "id": "zib-LaboratoryTestResult",
+  "text": {
+    "status": "empty",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">No narrative is provided for definitional resources. A human-readable rendering can be found in the implementation guide(s) where this resource is used.</div>"
+  },
+  "url": "http://nictiz.nl/fhir/StructureDefinition/zib-LaboratoryTestResult",
+  "name": "ZibLaboratoryTestResult",
+  "title": "zib LaboratoryTestResult",
+  "status": "draft",
+  "publisher": "Nictiz",
+  "contact": [
+    {
+      "name": "Nictiz",
+      "telecom": [
+        {
+          "system": "url",
+          "value": "https://www.nictiz.nl",
+          "use": "work"
+        }
+      ]
+    }
+  ],
+  "description": "A laboratory result describes the result of a laboratory analysis.\r\nThese are specimen-oriented tests as performed in laboratories such as Clinical Chemistry, Serology, Microbiology, etc.\r\nIn addition to the results of tests with a singular result, this concept can also contain the results of more complex tests with multiple results or a ‘panel’.",
+  "purpose": "This Observation resource represents the Dutch [zib ('Zorginformatiebouwsteen', i.e. Health and Care Information Model) LaboratoryTestResult v4.6 (2020)](https://zibs.nl/wiki/LaboratoryTestResult-v4.6(2020EN)).",
+  "copyright": "Copyright and related rights waived via CC0, https://creativecommons.org/publicdomain/zero/1.0/. This does not apply to information from third parties, for example a medical terminology system. The implementer alone is responsible for identifying and obtaining any necessary licenses or authorizations to utilize third party IP in connection with the specification or otherwise.",
+  "fhirVersion": "4.0.1",
+  "mapping": [
+    {
+      "identity": "zib-laboratorytestresult-v4.6-2020EN",
+      "uri": "https://zibs.nl/wiki/LaboratoryTestResult-v4.6(2020EN)",
+      "name": "zib LaboratoryTestResult-v4.6(2020EN)"
+    }
+  ],
+  "kind": "resource",
+  "abstract": true,
+  "type": "Observation",
+  "baseDefinition": "http://hl7.org/fhir/StructureDefinition/Observation",
+  "derivation": "constraint",
+  "differential": {
+    "element": [
+      {
+        "id": "Observation",
+        "path": "Observation",
+        "short": "LaboratoryTestResult / LaboratoryTest",
+        "definition": "An instance of zib LaboratoryTestResult or of a single LaboratoryTest within this zib.",
+        "comment": "**1. Guidance on use for singular tests and panels**\r\n\r\nThe zib LaboratoryTestResult captures both singular laboratory tests and panels/clusters of multiple related tests requested together (e.g. blood gases and EBV serology)*. This profile should be used slightly different in these two situations:\r\n\r\n* For singular laboratory test results\r\n    * A single instance of this profile is to be used.\r\n    * `Observation.code` represents zib concept TestCode (NL-CM:13.1.8, the name and code of the executed test) while zib concept PanelOrBattery (NL-CM:13.1.4, the name and code of the compound test) is not expected to be present.\r\n    * `Observation.status` represents zib concept TestResultStatus (NL-CM:13.1.31, the status of the test result). ResultStatus (NL-CM:13.1.6) is redundant in this situation and not expected to be present.\r\n* For a panel or cluster:\r\n    * There is a single instance for the overall result plus an instance for each individual test result.\r\n    * The concepts Comment (NL-CM:13.1.5, `Observation.note`), ResultType (NL-CM:13.1.7, `Observation.category:resultType`) and Performer (NL-CM:13.1.35, `Observation.performer`) are repeated in the instance for the overall result and in all instances for the individual test results.\r\n    * For the instance representing the overall result:\r\n      * `Observation.code` represents zib concept PanelOrBattery (NL-CM:13.1.4, the name and code of the compound test), which is required for panels/clusters.\r\n      * `Observation.status` represents zib concept ResultStatus (NL-CM:13.1.6, the overall status of the test result). This status should be in accordance with the statuses of each individual test.\r\n      * The instances representing the individual test results are referenced using `Observation.hasMember:laboratoryTest`.\r\n    * For the instances representing the individual test results:\r\n      * `Observation.code` represents zib concept TestCode (NL-CM:13.1.8, the name and code of the executed test) for that particular test.\r\n      * `Observation.status` represents zib concept TestResultStatus (NL-CM:13.1.31, the status of the test result) for that particular test.\r\n\r\nNote 1: The zib also recognizes the RelatedResult concept (NL-CM:13.1.33). This is unrelated to the use of panels/clusters. This concept is represented using `Observation.extension:sequelTo`.\r\n\r\n**2. Unmapped zib concepts**\r\n\r\n* The zib concept Requester (NL-CM:13.1.34) is not implemented because it is deemed unimplementable as-is. It will be removed in the next version of the zib (see <https://bits.nictiz.nl/browse/ZIB-1269> for more information).\r\n* The zib concept InterpretationMethod (NL-CM:13.1.30) is not implemented because there's no obvious mapping to FHIR while the definition is problematic and there doesn't seem to be a use case for exchanging this information (see <https://bits.nictiz.nl/browse/ZIB-1292> for more information).",
+        "alias": [
+          "LaboratoriumUitslag",
+          "LaboratoriumTest"
+        ],
+        "mapping": [
+          {
+            "identity": "zib-laboratorytestresult-v4.6-2020EN",
+            "map": "NL-CM:13.1.1",
+            "comment": "LaboratoryTestResult"
+          },
+          {
+            "identity": "zib-laboratorytestresult-v4.6-2020EN",
+            "map": "NL-CM:13.1.3",
+            "comment": "LaboratoryTest"
+          }
+        ]
+      },
+      {
+        "id": "Observation.extension:sequelTo",
+        "path": "Observation.extension",
+        "sliceName": "sequelTo",
+        "type": [
+          {
+            "code": "Extension",
+            "profile": [
+              "http://hl7.org/fhir/StructureDefinition/observation-sequelTo"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "Observation.extension:sequelTo.value[x]",
+        "path": "Observation.extension.value[x]",
+        "short": "RelatedResult",
+        "definition": "Reference to related tests, e.g. paired tests or sequential tests like gram staining and microbiological cultures.",
+        "alias": [
+          "GerelateerdeUitslag"
+        ],
+        "type": [
+          {
+            "code": "Reference",
+            "targetProfile": [
+              "http://hl7.org/fhir/StructureDefinition/Observation",
+              "http://nictiz.nl/fhir/StructureDefinition/zib-LaboratoryTestResult"
+            ]
+          }
+        ],
+        "mapping": [
+          {
+            "identity": "zib-laboratorytestresult-v4.6-2020EN",
+            "map": "NL-CM:13.1.33",
+            "comment": "RelatedResult"
+          }
+        ]
+      },
+      {
+        "id": "Observation.status",
+        "path": "Observation.status",
+        "short": "ResultStatus / TestResultStatus",
+        "definition": "The status of the laboratory test result or test result panel/cluster.",
+        "comment": "If this resource represents a singular test result or a single test in a cluster/panel, this will be the status of this particular test result. However, if it represents the overall result of a panel/cluster, this status should represent the status of the panel/cluster and should be in accordance with the test result statuses of the individual tests.",
+        "alias": [
+          "TestUitslagStatus",
+          "ResultaatStatus"
+        ],
+        "binding": {
+          "strength": "required",
+          "description": "Use ConceptMap TestUitslagStatusCodelijst-to-ObservationStatus to translate terminology from the functional model to profile terminology in ValueSet ObservationStatus.",
+          "valueSet": "http://hl7.org/fhir/ValueSet/observation-status|4.0.1",
+          "_valueSet": {
+            "extension": [
+              {
+                "url": "http://hl7.org/fhir/StructureDefinition/11179-permitted-value-conceptmap",
+                "valueCanonical": "http://nictiz.nl/fhir/ConceptMap/TestUitslagStatusCodelijst-to-ObservationStatus"
+              }
+            ]
+          }
+        },
+        "mapping": [
+          {
+            "identity": "zib-laboratorytestresult-v4.6-2020EN",
+            "map": "NL-CM:13.1.6",
+            "comment": "ResultStatus"
+          },
+          {
+            "identity": "zib-laboratorytestresult-v4.6-2020EN",
+            "map": "NL-CM:13.1.31",
+            "comment": "TestResultStatus"
+          }
+        ]
+      },
+      {
+        "id": "Observation.category",
+        "path": "Observation.category",
+        "slicing": {
+          "discriminator": [
+            {
+              "type": "value",
+              "path": "$this"
+            }
+          ],
+          "rules": "open"
+        },
+        "min": 1
+      },
+      {
+        "id": "Observation.category:laboratoryCategory",
+        "path": "Observation.category",
+        "sliceName": "laboratoryCategory",
+        "min": 1,
+        "max": "1",
+        "patternCodeableConcept": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+              "code": "laboratory"
+            }
+          ]
+        }
+      },
+      {
+        "id": "Observation.category:resultType",
+        "path": "Observation.category",
+        "sliceName": "resultType",
+        "short": "ResultType",
+        "definition": "The type of result defines the laboratory specialty under which the test is categorized.",
+        "alias": [
+          "ResultaatType"
+        ],
+        "max": "1",
+        "binding": {
+          "strength": "required",
+          "valueSet": "http://decor.nictiz.nl/fhir/ValueSet/2.16.840.1.113883.2.4.3.11.60.40.2.13.1.1--20200901000000"
+        },
+        "mapping": [
+          {
+            "identity": "zib-laboratorytestresult-v4.6-2020EN",
+            "map": "NL-CM:13.1.7",
+            "comment": "ResultType"
+          }
+        ]
+      },
+      {
+        "id": "Observation.code",
+        "path": "Observation.code",
+        "short": "PanelOrBattery / TestCode",
+        "definition": "The name and code of the executed test. For laboratory tests comprising multiple subtests and often requested together as a whole, this concept contains the name and code of the compound request (often indicated as a ‘panel’, ‘battery’ or ‘cluster’). Examples include: blood gases and EBV serology.",
+        "comment": "When this resource represents a singular laboratory test result, the code MUST come from either [TestCodeNHGCodelijst](http://decor.nictiz.nl/fhir/ValueSet/2.16.840.1.113883.2.4.3.11.60.40.2.13.1.16--20200901000000) (representing NHG Tabel 45) or [TestCodeLOINCCodelijst](http://decor.nictiz.nl/fhir/ValueSet/2.16.840.1.113883.2.4.3.11.60.40.2.13.1.3--20200901000000) (representing the Nederlandse Labcodeset). When this resource represents the overall result of a panel/cluster, the code MUST come from [OnderzoekCodelijst](http://decor.nictiz.nl/fhir/ValueSet/2.16.840.1.113883.2.4.3.11.60.40.2.13.1.5--20200901000000) (representing LOINC). See the root of this profile for guidance.",
+        "alias": [
+          "Onderzoek",
+          "TestCode"
+        ],
+        "binding": {
+          "strength": "required",
+          "valueSet": "http://nictiz.nl/fhir/ValueSet/TestCode-en-Onderzoek-Codelijsten"
+        },
+        "mapping": [
+          {
+            "identity": "zib-laboratorytestresult-v4.6-2020EN",
+            "map": "NL-CM:13.1.4",
+            "comment": "PanelOrBattery"
+          },
+          {
+            "identity": "zib-laboratorytestresult-v4.6-2020EN",
+            "map": "NL-CM:13.1.8",
+            "comment": "TestCode"
+          }
+        ]
+      },
+      {
+        "id": "Observation.effective[x]",
+        "path": "Observation.effective[x]",
+        "slicing": {
+          "discriminator": [
+            {
+              "type": "type",
+              "path": "$this"
+            }
+          ],
+          "rules": "open"
+        }
+      },
+      {
+        "id": "Observation.effective[x]:effectiveDateTime",
+        "path": "Observation.effective[x]",
+        "sliceName": "effectiveDateTime",
+        "short": "TestDateTime",
+        "definition": "The date and if possible the time at which the test was carried out.",
+        "alias": [
+          "TestDatumTijd"
+        ],
+        "type": [
+          {
+            "code": "dateTime"
+          }
+        ],
+        "mapping": [
+          {
+            "identity": "zib-laboratorytestresult-v4.6-2020EN",
+            "map": "NL-CM:13.1.13",
+            "comment": "TestDateTime"
+          }
+        ]
+      },
+      {
+        "id": "Observation.performer",
+        "path": "Observation.performer",
+        "slicing": {
+          "discriminator": [
+            {
+              "type": "profile",
+              "path": "resolve()"
+            }
+          ],
+          "rules": "open"
+        }
+      },
+      {
+        "id": "Observation.performer:performer",
+        "path": "Observation.performer",
+        "sliceName": "performer",
+        "short": "Performer",
+        "definition": "The organization where or by whom the LaboratoryTestResult was performed.\r\n\r\nNote: the zib formally defines this relation as a reference to zib HealthcareProvider, which is primarily defined as the location at which the service was performed, and only secondarily as the organization associated with this location. According to this logic, the expected reference would be to the zib HealthcareProvider Location profile (<http://nictiz.nl/fhir/StructureDefinition/zib-HealthcareProvider>) rather than the Organization profile (<http://nictiz.nl/fhir/StructureDefinition/zib-HealthcareProvider-Organization>). However, on a functional level this concept is usually understood to be about the organization rather than the location, which is in line with the way FHIR models the current element. For this reason, the Organization rather than the Location resource is referenced here. See https://bits.nictiz.nl/browse/MM-4747 for more information.",
+        "alias": [
+          "Uitvoerder"
+        ],
+        "max": "1",
+        "type": [
+          {
+            "code": "Reference",
+            "targetProfile": [
+              "http://nictiz.nl/fhir/StructureDefinition/zib-HealthcareProvider-Organization"
+            ]
+          }
+        ],
+        "mapping": [
+          {
+            "identity": "zib-laboratorytestresult-v4.6-2020EN",
+            "map": "NL-CM:13.1.35",
+            "comment": "Performer"
+          }
+        ]
+      },
+      {
+        "id": "Observation.value[x]",
+        "path": "Observation.value[x]",
+        "short": "TestResult",
+        "definition": "The test result. Depending on the type of test, the result will consist of a value with a unit or a coded value (ordinal or nominal).",
+        "alias": [
+          "TestUitslag"
+        ],
+        "mapping": [
+          {
+            "identity": "zib-laboratorytestresult-v4.6-2020EN",
+            "map": "NL-CM:13.1.10",
+            "comment": "TestResult"
+          }
+        ]
+      },
+      {
+        "id": "Observation.interpretation",
+        "path": "Observation.interpretation",
+        "slicing": {
+          "discriminator": [
+            {
+              "type": "exists",
+              "path": "coding"
+            }
+          ],
+          "rules": "open"
+        }
+      },
+      {
+        "id": "Observation.interpretation:resultFlags",
+        "path": "Observation.interpretation",
+        "sliceName": "resultFlags",
+        "short": "ResultFlags",
+        "definition": "Attention codes indicating whether the result of a quantitative test is above or below certain reference values or interpreting the result otherwise. The values Resistant, Intermediate and Susceptible are used with microbiological test results.",
+        "alias": [
+          "InterpretatieVlaggen"
+        ],
+        "binding": {
+          "strength": "extensible",
+          "description": "Use ConceptMap InterpretatieVlaggenCodelijst-to-ObservationInterpretationCodes to translate terminology from the functional model to profile terminology in ValueSet ObservationInterpretation.",
+          "valueSet": "http://decor.nictiz.nl/fhir/ValueSet/2.16.840.1.113883.2.4.3.11.60.40.2.13.1.7--20200901000000",
+          "_valueSet": {
+            "extension": [
+              {
+                "url": "http://hl7.org/fhir/StructureDefinition/11179-permitted-value-conceptmap",
+                "valueCanonical": "http://nictiz.nl/fhir/ConceptMap/InterpretatieVlaggenCodelijst-to-ObservationInterpretationCodes"
+              }
+            ]
+          }
+        },
+        "mapping": [
+          {
+            "identity": "zib-laboratorytestresult-v4.6-2020EN",
+            "map": "NL-CM:13.1.14",
+            "comment": "ResultFlags"
+          }
+        ]
+      },
+      {
+        "id": "Observation.interpretation:resultFlags.coding",
+        "path": "Observation.interpretation.coding",
+        "min": 1
+      },
+      {
+        "id": "Observation.interpretation:resultInterpretation",
+        "path": "Observation.interpretation",
+        "sliceName": "resultInterpretation",
+        "max": "1"
+      },
+      {
+        "id": "Observation.interpretation:resultInterpretation.coding",
+        "path": "Observation.interpretation.coding",
+        "max": "0"
+      },
+      {
+        "id": "Observation.interpretation:resultInterpretation.text",
+        "path": "Observation.interpretation.text",
+        "short": "ResultInterpretation",
+        "definition": "Comment of the laboratory specialist regarding the interpretation of the results",
+        "alias": [
+          "UitslagInterpretatie"
+        ],
+        "mapping": [
+          {
+            "identity": "zib-laboratorytestresult-v4.6-2020EN",
+            "map": "NL-CM:13.1.32",
+            "comment": "ResultInterpretation"
+          }
+        ]
+      },
+      {
+        "id": "Observation.note",
+        "path": "Observation.note",
+        "max": "1"
+      },
+      {
+        "id": "Observation.note.text",
+        "path": "Observation.note.text",
+        "short": "Comment",
+        "definition": "Comments, such as a textual interpretation or advice accompanying the result, for example.",
+        "alias": [
+          "Toelichting"
+        ],
+        "mapping": [
+          {
+            "identity": "zib-laboratorytestresult-v4.6-2020EN",
+            "map": "NL-CM:13.1.5",
+            "comment": "Comment"
+          }
+        ]
+      },
+      {
+        "id": "Observation.method",
+        "path": "Observation.method",
+        "short": "TestMethod",
+        "definition": "The test method used to obtain the result.",
+        "alias": [
+          "Testmethode"
+        ],
+        "binding": {
+          "strength": "required",
+          "valueSet": "http://decor.nictiz.nl/fhir/ValueSet/2.16.840.1.113883.2.4.3.11.60.40.2.13.1.4--20200901000000"
+        },
+        "mapping": [
+          {
+            "identity": "zib-laboratorytestresult-v4.6-2020EN",
+            "map": "NL-CM:13.1.9",
+            "comment": "TestMethod"
+          }
+        ]
+      },
+      {
+        "id": "Observation.specimen",
+        "path": "Observation.specimen",
+        "comment": "The Specimen concept of the zib defines either the collected source material without further processing, or a microorganism, optionally including the source material from which it whas isolated.\r\n\r\n* If the Specimen pertains a material (zib concept SpecimenMaterial), the `Specimen.type` of the resource referenced here should contain a coding indicating a specimen material.\r\n* If the Specimen pertains a microorganism (zib concept Microorganism), the `Specimen.type` of the resource referenced here should contain a coding indicating the microorganims. If required, the sample material from which the microorganism was isolated can be referenced using `Specimen.parent` on that resource, but it is not referenced here.",
+        "type": [
+          {
+            "code": "Reference",
+            "targetProfile": [
+              "http://hl7.org/fhir/StructureDefinition/Specimen",
+              "http://nictiz.nl/fhir/StructureDefinition/zib-LaboratoryTestResult.Specimen"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "Observation.referenceRange.low",
+        "path": "Observation.referenceRange.low",
+        "short": "ReferenceRangeLowerLimit",
+        "definition": "The lower reference limit for the patient of the value measured with the test.",
+        "comment": "The zib concepts ReferenceRangeUpperLimit and ReferenceRangeLowerLimit are defined as datatype ANY, but they only have meaning if the result of the test (zib concept TestResult) is expressed using the Quantity datatype. Therefore, this element is only to be used if `Observation.valueQuantity` is populated, and should be in the same unit. This will be made explicit in future versions of the zib: see <https://bits.nictiz.nl/browse/ZIB-1703>.",
+        "alias": [
+          "ReferentieOndergrens"
+        ],
+        "mapping": [
+          {
+            "identity": "zib-laboratorytestresult-v4.6-2020EN",
+            "map": "NL-CM:13.1.12",
+            "comment": "ReferenceRangeLowerLimit"
+          }
+        ]
+      },
+      {
+        "id": "Observation.referenceRange.high",
+        "path": "Observation.referenceRange.high",
+        "short": "ReferenceRangeUpperLimit",
+        "definition": "The upper reference limit for the patient of the value measured in the test.",
+        "comment": "The zib concepts ReferenceRangeUpperLimit and ReferenceRangeLowerLimit are defined as datatype ANY, but they only have meaning if the result of the test (zib concept TestResult) is expressed using the Quantity datatype. Therefore, this element is only to be used if `Observation.valueQuantity` is populated, and should be in the same unit. This will be made explicit in future versions of the zib: see <https://bits.nictiz.nl/browse/ZIB-1703>.",
+        "alias": [
+          "ReferentieBovengrens"
+        ],
+        "mapping": [
+          {
+            "identity": "zib-laboratorytestresult-v4.6-2020EN",
+            "map": "NL-CM:13.1.11",
+            "comment": "ReferenceRangeUpperLimit"
+          }
+        ]
+      },
+      {
+        "id": "Observation.hasMember",
+        "path": "Observation.hasMember",
+        "slicing": {
+          "discriminator": [
+            {
+              "type": "profile",
+              "path": "resolve()"
+            }
+          ],
+          "rules": "open"
+        },
+        "comment": "When this resource is used to represent the overall result of a panel/cluster of laboratory tests, the individual test results SHOULD be referenced here. See the root of this profile for guidance."
+      },
+      {
+        "id": "Observation.hasMember:laboratoryTest",
+        "path": "Observation.hasMember",
+        "sliceName": "laboratoryTest",
+        "short": "LaboratoryTest",
+        "definition": "Individual laboratory tests if the current Observation resource represents a panel or cluster.",
+        "comment": "See the root comment for guidance on representing singular laboratory test results versus panels/clusters.",
+        "alias": [
+          "LaboratoriumTest"
+        ],
+        "type": [
+          {
+            "code": "Reference",
+            "targetProfile": [
+              "http://nictiz.nl/fhir/StructureDefinition/zib-LaboratoryTestResult"
+            ]
+          }
+        ],
+        "mapping": [
+          {
+            "identity": "zib-laboratorytestresult-v4.6-2020EN",
+            "map": "NL-CM:13.1.3",
+            "comment": "LaboratoryTest, if these are part of a panel/cluster"
+          }
+        ]
+      }
+    ]
+  }
+}
