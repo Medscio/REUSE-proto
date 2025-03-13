@@ -7,7 +7,6 @@ echo "----------------------------"
 
 # Remove existing pods if they exist
 echo "Removing existing pods..."
-podman pod rm -f test 2>/dev/null || true
 podman pod rm -f airflow 2>/dev/null || true
 podman pod rm -f hapi-fhir 2>/dev/null || true
 podman pod rm -f ehrbase 2>/dev/null || true

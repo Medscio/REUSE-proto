@@ -5,7 +5,7 @@
 The `deploy.sh` script (located at `podman/deploy.sh`) performs the following technical operations:
 
 1. **Environment Cleanup**:
-   - Removes existing pods (`test`, `airflow`, `hapi-fhir`, `ehrbase`) using `podman pod rm`
+   - Removes existing pods (`airflow`, `hapi-fhir`, `ehrbase`) using `podman pod rm`
    - Tears down the `medscio-network` if it exists
 
 2. **Network Configuration**:
