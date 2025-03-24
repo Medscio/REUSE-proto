@@ -54,7 +54,7 @@ The `deploy.sh` script (located at `podman/deploy.sh`) performs the following te
 
    For example:
    ```bash
-   ./deploy.sh /home/username/dev/Medscio/REUSE
+   ./deploy.sh /home/username/dev/Medscio/REUSE-proto
    ```
 
    Note: The repository directory should contain the following structure:
