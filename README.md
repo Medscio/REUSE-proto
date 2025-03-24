@@ -40,6 +40,8 @@ The `deploy.sh` script (located at `podman/deploy.sh`) performs the following te
 
 ## Deployment Instructions 
 
+### Podman run method (under `/podman`)
+
 1. To run, first give `deploy.sh` executable permissions by running the following command:
 
    ```bash
@@ -75,6 +77,27 @@ The `deploy.sh` script (located at `podman/deploy.sh`) performs the following te
    ```bash
     podman pod stop airflow && podman pod rm airflow && podman pod stop ehrbase && podman pod rm ehrbase && podman pod stop hapi-fhir && podman pod rm hapi-fhir
    ```
+
+### podman-compose method (under `/podman-compose`)
+1. To run, first give `deploy.sh` executable permissions by running the following command:
+
+   ```bash
+   chmod +x ./deploy.sh
+   ```
+
+2. Simply run the deploy script with the repository directory path as a required argument:
+
+   ```bash
+   ./deploy.sh 
+   ```
+   * During deployment, if prompted to choose podman images, choose the images from the `docker.io` registry in ALL cases. For example:
+   
+        ```bash
+        ? Please select an image: 
+        registry.fedoraproject.org/postgres:14
+        registry.access.redhat.com/postgres:14
+        ▸ docker.io/library/postgres:14
+        ```
 
 ## Troubleshooting
 

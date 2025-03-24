@@ -1,0 +1,101 @@
+version: '3'
+
+services:
+  # Airflow Services
+  airflow-db:
+    image: postgres:14
+    environment:
+      POSTGRES_USER: airflow
+      POSTGRES_PASSWORD: airflow
+      POSTGRES_DB: airflow
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "airflow"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - airflow-db-data:/var/lib/postgresql/data
+
+  airflow-webserver:
+    image: localhost/custom-airflow:latest
+    depends_on:
+      - airflow-db
+    entrypoint: /bin/bash
+    command: -c "airflow db init && airflow users create --username admin --password admin --firstname admin --lastname admin --role Admin --email admin@example.com && airflow webserver"
+    environment:
+      PYTHONPATH: "/opt/airflow"
+      AIRFLOW__CORE__EXECUTOR: "LocalExecutor"
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: "postgresql+psycopg2://airflow:airflow@airflow-db:5432/airflow"
+    ports:
+      - "8090:8080"
+    volumes:
+      - airflow-logs:/opt/airflow/logs
+      - airflow-data:/opt/airflow/data
+
+  airflow-scheduler:
+    image: localhost/custom-airflow:latest
+    depends_on:
+      - airflow-db
+      - airflow-webserver
+    entrypoint: /bin/bash
+    command: -c "sleep 30 && airflow scheduler"
+    environment:
+      PYTHONPATH: "/opt/airflow"
+      AIRFLOW__CORE__EXECUTOR: "LocalExecutor"
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: "postgresql+psycopg2://airflow:airflow@airflow-db:5432/airflow"
+    volumes:
+      - airflow-logs:/opt/airflow/logs
+      - airflow-data:/opt/airflow/data
+
+  # EHRBase Services
+  ehrdb:
+    image: ehrbase/ehrbase-v2-postgres:16.2
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      EHRBASE_USER_ADMIN: ehrbase
+      EHRBASE_PASSWORD_ADMIN: ehrbase
+      EHRBASE_USER: ehrbase_restricted
+      EHRBASE_PASSWORD: ehrbase_restricted
+    ports:
+      - "5433:5432"
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - ehrdb-data:/var/lib/postgresql/data
+
+  ehrbase:
+    image: ehrbase/ehrbase:next
+    depends_on:
+      - ehrdb
+    environment:
+      DB_URL: jdbc:postgresql://ehrdb:5432/ehrbase
+      DB_USER_ADMIN: ehrbase
+      DB_PASS_ADMIN: ehrbase
+      DB_USER: ehrbase_restricted
+      DB_PASS: ehrbase_restricted
+    ports:
+      - "8084:8080"
+
+  # HAPI FHIR Service
+  hapi-fhir:
+    image: hapiproject/hapi:latest
+    ports:
+      - "8082:8080"
+    environment:
+      HAPI_FHIR_VERSION: R4
+      HAPI_FHIR_DEFAULT_ENCODING: JSON
+      HAPI_FHIR_ALLOW_EXTERNAL_REFERENCES: "true"
+      HAPI_FHIR_ALLOW_PLACEHOLDER_REFERENCES: "true"
+      JAVA_TOOL_OPTIONS: "-Xmx1g -Xms512m"
+
+volumes:
+  airflow-logs:
+  airflow-data:
+  airflow-db-data:
+  ehrdb-data:
