@@ -2,3 +2,125 @@ Starting deployment script...
 Using repository directory: C:\Users\Work\Documents\medscio\Programmeren\REUSE-proto\
 ----------------------------
 Removing existing pods...
+473d5b8406cf13f06af6e8b85aab646f312580680189ae1e2bdc6451e5ce6efc
+615fc7b0e529f97c52f6376216a5527a97f56d5e755fc01749fc8940c09ce7be
+c3db371a071346442aa570ec826aa211e88974d847e03dfa23536ee01616a2be
+Checking for existing network...
+Removing existing medscio-network...
+medscio-network
+Creating medscio-network...
+medscio-network
+Creating a custom Airflow image
+Using temporary directory: /tmp/tmp.l626ul7brU
+Creating data directory structure...
+Copying data files...
+Verifying data files were copied to temp directory:
+total 8
+drwxr-xr-x 1 Work 197121 0 May 13 09:33 ./
+drwxr-xr-x 1 Work 197121 0 May 13 09:33 ../
+drwxr-xr-x 1 Work 197121 0 May 13 09:33 EPIC_output/
+drwxr-xr-x 1 Work 197121 0 May 13 09:33 hapi_fhir_profiles/
+drwxr-xr-x 1 Work 197121 0 May 13 09:33 openEHR_compositions/
+drwxr-xr-x 1 Work 197121 0 May 13 09:33 openEHR_templates/
+Checking output directories:
+total 4
+drwxr-xr-x 1 Work 197121 0 May 13 09:33 ./
+drwxr-xr-x 1 Work 197121 0 May 13 09:33 ../
+drwxr-xr-x 1 Work 197121 0 May 13 09:33 mapping_schemas/
+drwxr-xr-x 1 Work 197121 0 May 13 09:33 output/
+drwxr-xr-x 1 Work 197121 0 May 13 09:33 templates/
+Copying .env.airflow file...
+Verifying .env.airflow file was copied to temp directory:
+total 1
+drwxr-xr-x 1 Work 197121  0 May 13 09:33 ./
+drwxr-xr-x 1 Work 197121  0 May 13 09:33 ../
+-rw-r--r-- 1 Work 197121 26 May 13 09:33 .env.airflow
+Adding project files to Dockerfile...
+Files that will be copied from project directory:
+total 1
+drwxr-xr-x 1 Work 197121  0 May 13 09:33 ./
+drwxr-xr-x 1 Work 197121  0 May 13 09:33 ../
+-rw-r--r-- 1 Work 197121 26 May 13 09:33 .env.airflow
+Building custom airflow image...
+STEP 1/12: FROM apache/airflow:2.6.3
+STEP 2/12: USER root
+--> Using cache 8da74a7d2bd776720762ff92b8be390d8b1266a5ead02482ecd7c99c18ab4120
+--> 8da74a7d2bd7
+STEP 3/12: RUN mkdir -p /opt/airflow/project     /opt/airflow/data     /opt/airflow/data/openEHR_templates     /opt/airflow/data/openEHR_compositions/output     /opt/airflow/data/EPIC_output     /opt/airflow/data/hapi_fhir_profiles     && chown -R airflow:root /opt/airflow/project /opt/airflow/data
+--> Using cache 0cd7e4dee311631a62fdb08e0b2e4a09a7b64215133d32432e96a257617d3249
+--> 0cd7e4dee311
+STEP 4/12: RUN chmod -R 755 /opt/airflow/project /opt/airflow/data &&     mkdir -p /opt/airflow/data/openEHR_compositions/output &&     mkdir -p /opt/airflow/data/EPIC_output &&     chown -R airflow:root /opt/airflow/data &&     chmod -R 777 /opt/airflow/data/openEHR_compositions/output     /opt/airflow/data/EPIC_output
+--> Using cache e1079cbc5a4e3a42c2795fb792ef7b00e03e9b108d42519980e33b93ea3a00cb
+--> e1079cbc5a4e
+STEP 5/12: USER airflow
+--> Using cache b5dec352488cf338fc55d492dca810b0aebf78df6a4570fcea707bd7c3cba506
+--> b5dec352488c
+STEP 6/12: COPY data/ /opt/airflow/data/
+--> Using cache 500a6d79311c96d6c31bf316fa999ba2c4d87e93d87d27caaa7c1d407c423dc4
+--> 500a6d79311c
+STEP 7/12: COPY project/.env.airflow /opt/airflow/.env.airflow
+--> Using cache f1ea1b5c3ec9d291645d0b8441bad8754bea4183a664214324bb6474319b94d9
+--> f1ea1b5c3ec9
+STEP 8/12: COPY --chown=airflow:root project/ /opt/airflow/project/
+--> Using cache 47fdca17013592e5c78f2ba395a70f46591e26ca0191a3c89fbf72d4df532d98
+--> 47fdca170135
+STEP 9/12: USER root
+--> Using cache 8d2046b29a32fbb421000c5ea3929992c844440db7bc928c24bcd81199e7cade
+--> 8d2046b29a32
+STEP 10/12: RUN [ -d "/opt/airflow/project" ] && [ "$(ls -A /opt/airflow/project)" ] && chmod -R 644 /opt/airflow/project/* || true &&     chmod 755 /opt/airflow/project /opt/airflow/data &&     find /opt/airflow/data -type d -exec chmod 755 {} \; &&     find /opt/airflow/data -type f -exec chmod 644 {} \; &&     chmod -R 777 /opt/airflow/data/openEHR_compositions/output     /opt/airflow/data/EPIC_output
+--> Using cache 6a290e32f969b2b9298678592aab7de84303fc371d594d47ecf1e151ecbb3295
+--> 6a290e32f969
+STEP 11/12: USER airflow
+--> Using cache ba5846a78e7035d80be639c6b1026034b88629cd260cc477a0a8ddbdff5ec4e5
+--> ba5846a78e70
+STEP 12/12: RUN if [ -f /opt/airflow/project/.env.airflow ]; then echo "Environment file exists in final image"; else echo "WARNING: Environment file not found in final image"; fi
+--> Using cache 9248792b6b5b436595f8d25b137c218198610f4e0b7b6e9cf9467ee4c0d19c35
+COMMIT custom-airflow
+--> 9248792b6b5b
+Successfully tagged localhost/custom-airflow:latest
+9248792b6b5b436595f8d25b137c218198610f4e0b7b6e9cf9467ee4c0d19c35
+Cleaning up temporary directory...
+Deploying Airflow pod with custom image...
+Pod:
+bf3cad68f89d7b73d36e0cf4d4941d6906ef91aeabcac565b6c2d818af33151b
+Containers:
+6a6af6db9eab4dbdaf35386355235f18aab3618600dddd8e15ebdf26e43fd4e0
+4bbf55e5f01e8582670af986a27c71860b4d42b468e51371e3a4edadb5cc94f3
+8499ff2328d4dbdd897eb988cfa319f63738eb80812e8023b50e94d313474d08
+
+Deploying HAPI FHIR pod...
+Pod:
+fd5ed929d42764e17267dcd337f70193566f2c18d93defd1672c0f4edc084fa9
+Container:
+ab7720862eb680965a222b045b9822e7ef1e8893beed6059c1e8fcac662da90c
+
+Deploying EHRBase pod...
+Pod:
+27e0b8b7492cc7fa5cdf7a2b32ea81abfd80f10614eab83002b8cf034caf6fc4
+Containers:
+b67d2a5cd92abf2bbd6d26987b0e9e74111e7ccf12e9445a970ca8bc07040c2e
+096862f4d01c6fbfa00f7d08dd3296e96f6b9e8417d0fc06e34905a38013088d
+
+
+Pods running:
+-------------
+POD ID        NAME        STATUS      CREATED                 INFRA ID      # OF CONTAINERS
+27e0b8b7492c  ehrbase     Running     Less than a second ago  64b18988cbdc  3
+fd5ed929d427  hapi-fhir   Running     1 second ago            d4b29316855b  2
+bf3cad68f89d  airflow     Running     2 seconds ago           028fd934b33f  4
+
+Containers running:
+------------------
+CONTAINER ID  IMAGE                                       COMMAND     CREATED        STATUS                   PORTS                                           NAMES
+028fd934b33f  localhost/podman-pause:5.4.1-1741651200                 2 seconds ago  Up 3 seconds             0.0.0.0:8090->8080/tcp                          bf3cad68f89d-infra
+6a6af6db9eab  docker.io/library/postgres:14               postgres    2 seconds ago  Up 3 seconds             0.0.0.0:8090->8080/tcp, 5432/tcp                airflow-airflow-db
+4bbf55e5f01e  localhost/custom-airflow:latest                         2 seconds ago  Up 2 seconds (starting)  0.0.0.0:8090->8080/tcp                          airflow-airflow-webserver
+8499ff2328d4  localhost/custom-airflow:latest                         2 seconds ago  Up 2 seconds (starting)  0.0.0.0:8090->8080/tcp                          airflow-airflow-scheduler
+d4b29316855b  localhost/podman-pause:5.4.1-1741651200                 1 second ago   Up 2 seconds             0.0.0.0:8082->8080/tcp                          fd5ed929d427-infra
+ab7720862eb6  docker.io/hapiproject/hapi:latest                       1 second ago   Up 2 seconds (starting)  0.0.0.0:8082->8080/tcp                          hapi-fhir-hapi-fhir
+64b18988cbdc  localhost/podman-pause:5.4.1-1741651200                 1 second ago   Up 1 second              0.0.0.0:5433->5432/tcp, 0.0.0.0:8084->8080/tcp  27e0b8b7492c-infra
+b67d2a5cd92a  docker.io/ehrbase/ehrbase-v2-postgres:16.2  postgres    1 second ago   Up 1 second              0.0.0.0:5433->5432/tcp, 0.0.0.0:8084->8080/tcp  ehrbase-ehrdb
+096862f4d01c  docker.io/ehrbase/ehrbase:next                          1 second ago   Up 1 second (starting)   0.0.0.0:5433->5432/tcp, 0.0.0.0:8084->8080/tcp  ehrbase-ehrbase
+
+Waiting for services to initialize (60 seconds)...
+[>                                                 ] 0%       60s remaining[>                                                 ] 1%       59s remaining[=>                                                ] 3%       58s remaining[==>                                               ] 5%       57s remaining[===>                                              ] 6%       56s remaining[====>                                             ] 8%       55s remaining[=====>                                            ] 10%      54s remaining[=====>                                            ] 11%      53s remaining[======>                                           ] 13%      52s remaining[=======>                                          ] 15%      51s remaining[========>                                         ] 16%      50s remaining[=========>                                        ] 18%      49s remaining[==========>                                       ] 20%      48s remaining[==========>                                       ] 21%      47s remaining[===========>                                      ] 23%      46s remaining[============>                                     ] 25%      45s remaining[=============>                                    ] 26%      44s remaining[==============>                                   ] 28%      43s remaining[===============>                                  ] 30%      42s remaining[===============>                                  ] 31%      41s remaining[================>                                 ] 33%      40s remaining[=================>                                ] 35%      39s remaining[==================>                               ] 36%      38s remaining[===================>                              ] 38%      37s remaining[====================>                             ] 40%      36s remaining[====================>                             ] 41%      35s remaining[=====================>                            ] 43%      34s remaining[======================>                           ] 45%      33s remaining[=======================>                          ] 46%      32s remaining[========================>                         ] 48%      31s remaining[=========================>                        ] 50%      30s remaining[=========================>                        ] 51%      29s remaining[==========================>                       ] 53%      28s remaining[===========================>                      ] 55%      27s remaining[============================>                     ] 56%      26s remaining[=============================>                    ] 58%      25s remaining[==============================>                   ] 60%      24s remaining[==============================>                   ] 61%      23s remaining[===============================>                  ] 63%      22s remaining[================================>                 ] 65%      21s remaining[=================================>                ] 66%      20s remaining[==================================>               ] 68%      19s remaining[===================================>              ] 70%      18s remaining[===================================>              ] 71%      17s remaining[====================================>             ] 73%      16s remaining[=====================================>            ] 75%      15s remaining[======================================>           ] 76%      14s remaining[=======================================>          ] 78%      13s remaining[========================================>         ] 80%      12s remaining[========================================>         ] 81%      11s remaining[=========================================>        ] 83%      10s remaining[==========================================>       ] 85%       9s remaining[===========================================>      ] 86%       8s remaining[============================================>     ] 88%       7s remaining
