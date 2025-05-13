@@ -1,6 +1,8 @@
 #!/bin/bash
 set -e
 
+exec > >(tee deploy_log.txt) 2>&1  # Redirect output to a log file
+
 # Check if repository directory argument is provided
 if [ $# -ne 1 ]; then
     echo "Error: Repository directory argument is required (must be absolute path)."
