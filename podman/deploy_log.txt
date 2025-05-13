@@ -2,45 +2,45 @@ Starting deployment script...
 Using repository directory: C:\Users\Work\Documents\medscio\Programmeren\REUSE-proto\
 ----------------------------
 Removing existing pods...
-473d5b8406cf13f06af6e8b85aab646f312580680189ae1e2bdc6451e5ce6efc
-615fc7b0e529f97c52f6376216a5527a97f56d5e755fc01749fc8940c09ce7be
-c3db371a071346442aa570ec826aa211e88974d847e03dfa23536ee01616a2be
+bf3cad68f89d7b73d36e0cf4d4941d6906ef91aeabcac565b6c2d818af33151b
+fd5ed929d42764e17267dcd337f70193566f2c18d93defd1672c0f4edc084fa9
+27e0b8b7492cc7fa5cdf7a2b32ea81abfd80f10614eab83002b8cf034caf6fc4
 Checking for existing network...
 Removing existing medscio-network...
 medscio-network
 Creating medscio-network...
 medscio-network
 Creating a custom Airflow image
-Using temporary directory: /tmp/tmp.l626ul7brU
+Using temporary directory: /tmp/tmp.F34ezk28YS
 Creating data directory structure...
 Copying data files...
 Verifying data files were copied to temp directory:
 total 8
-drwxr-xr-x 1 Work 197121 0 May 13 09:33 ./
-drwxr-xr-x 1 Work 197121 0 May 13 09:33 ../
-drwxr-xr-x 1 Work 197121 0 May 13 09:33 EPIC_output/
-drwxr-xr-x 1 Work 197121 0 May 13 09:33 hapi_fhir_profiles/
-drwxr-xr-x 1 Work 197121 0 May 13 09:33 openEHR_compositions/
-drwxr-xr-x 1 Work 197121 0 May 13 09:33 openEHR_templates/
+drwxr-xr-x 1 Work 197121 0 May 13 09:59 ./
+drwxr-xr-x 1 Work 197121 0 May 13 09:59 ../
+drwxr-xr-x 1 Work 197121 0 May 13 09:59 EPIC_output/
+drwxr-xr-x 1 Work 197121 0 May 13 09:59 hapi_fhir_profiles/
+drwxr-xr-x 1 Work 197121 0 May 13 09:59 openEHR_compositions/
+drwxr-xr-x 1 Work 197121 0 May 13 09:59 openEHR_templates/
 Checking output directories:
 total 4
-drwxr-xr-x 1 Work 197121 0 May 13 09:33 ./
-drwxr-xr-x 1 Work 197121 0 May 13 09:33 ../
-drwxr-xr-x 1 Work 197121 0 May 13 09:33 mapping_schemas/
-drwxr-xr-x 1 Work 197121 0 May 13 09:33 output/
-drwxr-xr-x 1 Work 197121 0 May 13 09:33 templates/
+drwxr-xr-x 1 Work 197121 0 May 13 09:59 ./
+drwxr-xr-x 1 Work 197121 0 May 13 09:59 ../
+drwxr-xr-x 1 Work 197121 0 May 13 09:59 mapping_schemas/
+drwxr-xr-x 1 Work 197121 0 May 13 09:59 output/
+drwxr-xr-x 1 Work 197121 0 May 13 09:59 templates/
 Copying .env.airflow file...
 Verifying .env.airflow file was copied to temp directory:
 total 1
-drwxr-xr-x 1 Work 197121  0 May 13 09:33 ./
-drwxr-xr-x 1 Work 197121  0 May 13 09:33 ../
--rw-r--r-- 1 Work 197121 26 May 13 09:33 .env.airflow
+drwxr-xr-x 1 Work 197121  0 May 13 09:59 ./
+drwxr-xr-x 1 Work 197121  0 May 13 09:59 ../
+-rw-r--r-- 1 Work 197121 26 May 13 09:59 .env.airflow
 Adding project files to Dockerfile...
 Files that will be copied from project directory:
 total 1
-drwxr-xr-x 1 Work 197121  0 May 13 09:33 ./
-drwxr-xr-x 1 Work 197121  0 May 13 09:33 ../
--rw-r--r-- 1 Work 197121 26 May 13 09:33 .env.airflow
+drwxr-xr-x 1 Work 197121  0 May 13 09:59 ./
+drwxr-xr-x 1 Work 197121  0 May 13 09:59 ../
+-rw-r--r-- 1 Work 197121 26 May 13 09:59 .env.airflow
 Building custom airflow image...
 STEP 1/12: FROM apache/airflow:2.6.3
 STEP 2/12: USER root
@@ -82,45 +82,91 @@ Successfully tagged localhost/custom-airflow:latest
 Cleaning up temporary directory...
 Deploying Airflow pod with custom image...
 Pod:
-bf3cad68f89d7b73d36e0cf4d4941d6906ef91aeabcac565b6c2d818af33151b
+c1e27e21a09c0fd5323e08ae58f85c0ff425adc56480775a6584d6551debd15f
 Containers:
-6a6af6db9eab4dbdaf35386355235f18aab3618600dddd8e15ebdf26e43fd4e0
-4bbf55e5f01e8582670af986a27c71860b4d42b468e51371e3a4edadb5cc94f3
-8499ff2328d4dbdd897eb988cfa319f63738eb80812e8023b50e94d313474d08
+d2d284ece6fd5001820c02ea495770dfb236508969cd18522d240b2b138c50e0
+2343035bd292afdac96f502ddc6883115e08938a1b52444204ee02f0dc9291c9
+ae8a9bcc24727d7e181d20f90b33ae72080928c4cb94ad531dcf82ea78bc0b44
 
 Deploying HAPI FHIR pod...
 Pod:
-fd5ed929d42764e17267dcd337f70193566f2c18d93defd1672c0f4edc084fa9
+cd8e98532c7d2b2a7debfa965c20e0eb8337cc69292cf1c5f838c7051b66b57a
 Container:
-ab7720862eb680965a222b045b9822e7ef1e8893beed6059c1e8fcac662da90c
+92f8d64de968e4ede99faf51eda85d72e2c256b0392ba9bb6c6c73c0252d04cf
 
 Deploying EHRBase pod...
 Pod:
-27e0b8b7492cc7fa5cdf7a2b32ea81abfd80f10614eab83002b8cf034caf6fc4
+6f5b2f1482e6ccf66abd32868d5af35f21f454f69251325225bfaf98a87f171b
 Containers:
-b67d2a5cd92abf2bbd6d26987b0e9e74111e7ccf12e9445a970ca8bc07040c2e
-096862f4d01c6fbfa00f7d08dd3296e96f6b9e8417d0fc06e34905a38013088d
+5b21233b246778ca79da4ae2224061e4959a0a6d4fe4d4533e75bb4911419368
+21f7963e8f44357104792fe2453d140bd6e653031f183fba7d93687197d510c5
 
 
 Pods running:
 -------------
 POD ID        NAME        STATUS      CREATED                 INFRA ID      # OF CONTAINERS
-27e0b8b7492c  ehrbase     Running     Less than a second ago  64b18988cbdc  3
-fd5ed929d427  hapi-fhir   Running     1 second ago            d4b29316855b  2
-bf3cad68f89d  airflow     Running     2 seconds ago           028fd934b33f  4
+6f5b2f1482e6  ehrbase     Running     Less than a second ago  56b2b206946d  3
+cd8e98532c7d  hapi-fhir   Running     1 second ago            83a93f91a7ea  2
+c1e27e21a09c  airflow     Running     3 seconds ago           c80ab6170f32  4
 
 Containers running:
 ------------------
 CONTAINER ID  IMAGE                                       COMMAND     CREATED        STATUS                   PORTS                                           NAMES
-028fd934b33f  localhost/podman-pause:5.4.1-1741651200                 2 seconds ago  Up 3 seconds             0.0.0.0:8090->8080/tcp                          bf3cad68f89d-infra
-6a6af6db9eab  docker.io/library/postgres:14               postgres    2 seconds ago  Up 3 seconds             0.0.0.0:8090->8080/tcp, 5432/tcp                airflow-airflow-db
-4bbf55e5f01e  localhost/custom-airflow:latest                         2 seconds ago  Up 2 seconds (starting)  0.0.0.0:8090->8080/tcp                          airflow-airflow-webserver
-8499ff2328d4  localhost/custom-airflow:latest                         2 seconds ago  Up 2 seconds (starting)  0.0.0.0:8090->8080/tcp                          airflow-airflow-scheduler
-d4b29316855b  localhost/podman-pause:5.4.1-1741651200                 1 second ago   Up 2 seconds             0.0.0.0:8082->8080/tcp                          fd5ed929d427-infra
-ab7720862eb6  docker.io/hapiproject/hapi:latest                       1 second ago   Up 2 seconds (starting)  0.0.0.0:8082->8080/tcp                          hapi-fhir-hapi-fhir
-64b18988cbdc  localhost/podman-pause:5.4.1-1741651200                 1 second ago   Up 1 second              0.0.0.0:5433->5432/tcp, 0.0.0.0:8084->8080/tcp  27e0b8b7492c-infra
-b67d2a5cd92a  docker.io/ehrbase/ehrbase-v2-postgres:16.2  postgres    1 second ago   Up 1 second              0.0.0.0:5433->5432/tcp, 0.0.0.0:8084->8080/tcp  ehrbase-ehrdb
-096862f4d01c  docker.io/ehrbase/ehrbase:next                          1 second ago   Up 1 second (starting)   0.0.0.0:5433->5432/tcp, 0.0.0.0:8084->8080/tcp  ehrbase-ehrbase
+c80ab6170f32  localhost/podman-pause:5.4.1-1741651200                 3 seconds ago  Up 3 seconds             0.0.0.0:8090->8080/tcp                          c1e27e21a09c-infra
+d2d284ece6fd  docker.io/library/postgres:14               postgres    3 seconds ago  Up 3 seconds             0.0.0.0:8090->8080/tcp, 5432/tcp                airflow-airflow-db
+2343035bd292  localhost/custom-airflow:latest                         3 seconds ago  Up 3 seconds (starting)  0.0.0.0:8090->8080/tcp                          airflow-airflow-webserver
+ae8a9bcc2472  localhost/custom-airflow:latest                         3 seconds ago  Up 3 seconds (starting)  0.0.0.0:8090->8080/tcp                          airflow-airflow-scheduler
+83a93f91a7ea  localhost/podman-pause:5.4.1-1741651200                 2 seconds ago  Up 2 seconds             0.0.0.0:8082->8080/tcp                          cd8e98532c7d-infra
+92f8d64de968  docker.io/hapiproject/hapi:latest                       2 seconds ago  Up 2 seconds (starting)  0.0.0.0:8082->8080/tcp                          hapi-fhir-hapi-fhir
+56b2b206946d  localhost/podman-pause:5.4.1-1741651200                 1 second ago   Up 1 second              0.0.0.0:5433->5432/tcp, 0.0.0.0:8084->8080/tcp  6f5b2f1482e6-infra
+5b21233b2467  docker.io/ehrbase/ehrbase-v2-postgres:16.2  postgres    1 second ago   Up 1 second              0.0.0.0:5433->5432/tcp, 0.0.0.0:8084->8080/tcp  ehrbase-ehrdb
+21f7963e8f44  docker.io/ehrbase/ehrbase:next                          1 second ago   Up 1 second (starting)   0.0.0.0:5433->5432/tcp, 0.0.0.0:8084->8080/tcp  ehrbase-ehrbase
 
 Waiting for services to initialize (60 seconds)...
-[>                                                 ] 0%       60s remaining[>                                                 ] 1%       59s remaining[=>                                                ] 3%       58s remaining[==>                                               ] 5%       57s remaining[===>                                              ] 6%       56s remaining[====>                                             ] 8%       55s remaining[=====>                                            ] 10%      54s remaining[=====>                                            ] 11%      53s remaining[======>                                           ] 13%      52s remaining[=======>                                          ] 15%      51s remaining[========>                                         ] 16%      50s remaining[=========>                                        ] 18%      49s remaining[==========>                                       ] 20%      48s remaining[==========>                                       ] 21%      47s remaining[===========>                                      ] 23%      46s remaining[============>                                     ] 25%      45s remaining[=============>                                    ] 26%      44s remaining[==============>                                   ] 28%      43s remaining[===============>                                  ] 30%      42s remaining[===============>                                  ] 31%      41s remaining[================>                                 ] 33%      40s remaining[=================>                                ] 35%      39s remaining[==================>                               ] 36%      38s remaining[===================>                              ] 38%      37s remaining[====================>                             ] 40%      36s remaining[====================>                             ] 41%      35s remaining[=====================>                            ] 43%      34s remaining[======================>                           ] 45%      33s remaining[=======================>                          ] 46%      32s remaining[========================>                         ] 48%      31s remaining[=========================>                        ] 50%      30s remaining[=========================>                        ] 51%      29s remaining[==========================>                       ] 53%      28s remaining[===========================>                      ] 55%      27s remaining[============================>                     ] 56%      26s remaining[=============================>                    ] 58%      25s remaining[==============================>                   ] 60%      24s remaining[==============================>                   ] 61%      23s remaining[===============================>                  ] 63%      22s remaining[================================>                 ] 65%      21s remaining[=================================>                ] 66%      20s remaining[==================================>               ] 68%      19s remaining[===================================>              ] 70%      18s remaining[===================================>              ] 71%      17s remaining[====================================>             ] 73%      16s remaining[=====================================>            ] 75%      15s remaining[======================================>           ] 76%      14s remaining[=======================================>          ] 78%      13s remaining[========================================>         ] 80%      12s remaining[========================================>         ] 81%      11s remaining[=========================================>        ] 83%      10s remaining[==========================================>       ] 85%       9s remaining[===========================================>      ] 86%       8s remaining[============================================>     ] 88%       7s remaining
+[>                                                 ] 0%       60s remaining[>                                                 ] 1%       59s remaining[=>                                                ] 3%       58s remaining[==>                                               ] 5%       57s remaining[===>                                              ] 6%       56s remaining[====>                                             ] 8%       55s remaining[=====>                                            ] 10%      54s remaining[=====>                                            ] 11%      53s remaining[======>                                           ] 13%      52s remaining[=======>                                          ] 15%      51s remaining[========>                                         ] 16%      50s remaining[=========>                                        ] 18%      49s remaining[==========>                                       ] 20%      48s remaining[==========>                                       ] 21%      47s remaining[===========>                                      ] 23%      46s remaining[============>                                     ] 25%      45s remaining[=============>                                    ] 26%      44s remaining[==============>                                   ] 28%      43s remaining[===============>                                  ] 30%      42s remaining[===============>                                  ] 31%      41s remaining[================>                                 ] 33%      40s remaining[=================>                                ] 35%      39s remaining[==================>                               ] 36%      38s remaining[===================>                              ] 38%      37s remaining[====================>                             ] 40%      36s remaining[====================>                             ] 41%      35s remaining[=====================>                            ] 43%      34s remaining[======================>                           ] 45%      33s remaining[=======================>                          ] 46%      32s remaining[========================>                         ] 48%      31s remaining[=========================>                        ] 50%      30s remaining[=========================>                        ] 51%      29s remaining[==========================>                       ] 53%      28s remaining[===========================>                      ] 55%      27s remaining[============================>                     ] 56%      26s remaining[=============================>                    ] 58%      25s remaining[==============================>                   ] 60%      24s remaining[==============================>                   ] 61%      23s remaining[===============================>                  ] 63%      22s remaining[================================>                 ] 65%      21s remaining[=================================>                ] 66%      20s remaining[==================================>               ] 68%      19s remaining[===================================>              ] 70%      18s remaining[===================================>              ] 71%      17s remaining[====================================>             ] 73%      16s remaining[=====================================>            ] 75%      15s remaining[======================================>           ] 76%      14s remaining[=======================================>          ] 78%      13s remaining[========================================>         ] 80%      12s remaining[========================================>         ] 81%      11s remaining[=========================================>        ] 83%      10s remaining[==========================================>       ] 85%       9s remaining[===========================================>      ] 86%       8s remaining[============================================>     ] 88%       7s remaining[=============================================>    ] 90%       6s remaining[=============================================>    ] 91%       5s remaining[==============================================>   ] 93%       4s remaining[===============================================>  ] 95%       3s remaining[================================================> ] 96%       2s remaining[=================================================>] 98%       1s remaining[==================================================] 100%      0s remainingbash: !\n: event not found
+
+Checking if environment file exists in container...
+bash: !': event not found
+
+Checking data directory in container...
+bash: !': event not found
+
+Checking permissions on output directories...
+bash: !': event not found
+bash: !': event not found
+
+Testing pod network connectivity...
+----------------------------------
+Testing basic network connectivity between services:
+Testing Airflow webserver connectivity:
+time="2025-05-13T10:00:27+02:00" level=warning msg="Failed to obtain TTY size: The handle is invalid."
+time="2025-05-13T10:00:27+02:00" level=warning msg="Failed to obtain TTY size: The handle is invalid."
+302
+Testing HAPI FHIR connectivity:
+200
+Testing EHRBase connectivity:
+302
+
+Testing DNS resolution between pods:
+10.89.0.3       hapi-fhir.dns.podman
+10.89.0.3       hapi-fhir.dns.podman
+10.89.0.3       hapi-fhir.dns.podman
+10.89.0.4       ehrbase.dns.podman
+10.89.0.4       ehrbase.dns.podman
+10.89.0.4       ehrbase.dns.podman
+
+Testing service availability...
+-----------------------------
+Checking HAPI FHIR service:
+  ✓ HAPI FHIR is running (Status: 200)
+Checking Airflow service:
+  ✓ Airflow is running (Status: 302)
+Checking EHRBase service:
+  ✓ EHRBase is running (Status: 302)
+
+Deployment complete!
+-------------------
+Access Airflow at: http://localhost:8090
+Access HAPI FHIR at: http://localhost:8082/fhir/metadata
+Access EHRBase at: http://localhost:8084/ehrbase
+
